@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!-- 新 Bootstrap 核心 CSS 文件 -->
+    <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <div class="row clearfix">
+        <div class="col-md-4 column">
+        </div>
+        <div class="col-md-4 column">
+            <form class="form-horizontal" id="loginForm"  role="form" >
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Account</label>
+                    <div class="col-sm-10">
+                        <input type="text" id="account" name="account" class="form-control"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Password</label>
+                    <div class="col-sm-10">
+                        <input type="password" id="password" name="password" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="button" id="loginBtn" class="btn btn-default">Sign in</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                       <div id="tip" th:text="${msg!=null}?${msg}"></div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-4 column">
+        </div>
+    </div>
+</div>
+<script>
+$("#loginBtn").click(function () {
+    var account = $.trim($("#account").val());
+    var password = $.trim($("#account").val());
+    if(account == null || account==""){
+        $("#account").focus();
+        $("#tip").css("color","red");
+        $("#tip").html("账户为空");
+    }else if(password == null || password ==""){
+        $("#password").focus();
+        $("#tip").css("color","red");
+        $("#tip").html("密码为空");
+    }else {
+        $("#tip").html("");
+
+        $.ajax({
+            type:'POST', //提交方法是POST
+            url:'[[@{/admin/login}]]', //请求的路径
+            data:$("#loginForm").serialize(),
+            dataType:'json',
+            timeout:1000,
+            error:function () {
+                $("#tip").css("color","red");
+                $("#tip").html("请求失败");
+            },
+            success:function (result) {
+                if (result != null && result == "1") {
+                    window.location.href='[[@{/admin/albums}]]';
+                }else if(result == "0"){
+                    $("#tip").css("color","red");
+                    $("#tip").html("密码错误");
+                    $("#password").val('');
+                }else if(result == "-1"){
+                    $("#tip").css("color","red");
+                    $("#tip").html("用户名不存在");
+                    $("#password").val('');
+                    $("#account").val('');
+                }else {
+                    $("#tip").css("color","red");
+                    $("#tip").html("未知异常");
+                    $("#password").val('');
+                    $("#account").val('');
+                }
+
+            }
+
+        })
+
+
+
+
+
+    }
+
+})
+</script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!-- 新 Bootstrap 核心 CSS 文件 -->
+    <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style>
+        .img-thumbnail {
+            width: 100px;
+            height: 100px;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-default" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse"
+                    data-target="#example-navbar-collapse">
+                <span class="sr-only">切换导航</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">后台管理</a>
+        </div>
+        <div class="collapse navbar-collapse" id="example-navbar-collapse">
+            <p class="navbar-text navbar-left" th:text="${session.adminAccount}"></p>
+            <ul class="nav navbar-nav navbar-right">
+                <li ><a href="#" th:href="@{/admin/out}">退出</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar" >
+            <ul class="nav nav-sidebar">
+                <li class="active"><a href="#" th:href="@{/admin/albums}">相册管理</a></li>
+                <li><a href="#" th:href="@{/admin/photos}">图片管理</a></li>
+                <li><a href="#" th:href="@{/admin/albums}">Export</a></li>
+            </ul>
+        </div>
+        <div class="col-sm-9  col-md-10  main">
+            <div th:if="${msg}!=null" class="alert alert-danger">[[${msg}]]</div><br/>
+            <form th:action="@{/admin/photo}" method="post" enctype="multipart/form-data" class="form-horizontal">
+                <input type="hidden" name="_method" value="put" th:if="${photo!=null}">
+                <input type="hidden" name="id" th:if="${photo!=null}" th:value="${photo.id}">
+
+                <div class="form-group">
+                    <label th:if="${photo==null}" class="col-sm-2 control-label">图片</label>
+                    <input type="file" name="image" th:if="${photo}==null">
+                    <img th:src="${photo.imgsrc}" th:if="${photo}!=null" class="img-thumbnail">
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">图片名称</label><input type="text" name="imgname" th:value="${photo!=null}?${photo.imgname}">
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">图片文本</label><input type="text" name="imgtext" th:value="${photo!=null}?${photo.imgtext}">
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">跳转链接</label><input type="text" name="imgurl" th:value="${photo!=null}?${photo.imgurl}">
+                </div>
+                <div class="form-group">
+                    <label>选择相册</label>
+                    <select class="form-control" name="albumid.id">
+                        <option th:if="${#lists.size(albums)>0}" th:each="album:${albums}" th:selected="${photo!=null}?${photo.albumid.id}==${album.id}" th:value="${album.id}">
+                            [[${album.name}]]
+                        </option>
+                        <option th:if="${#lists.size(albums)==0}">无相册，请新建相册</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button class="btn btn-default" type="submit">确认</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

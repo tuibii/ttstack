@@ -1,0 +1,36 @@
+
+spring:
+  datasource:
+    username: root
+    password: "000000"
+    url: jdbc:mysql://192.168.32.128:3306/stack?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+
+    initialSize: 5
+    minIdle: 5
+    maxActive: 20
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: select 1 from dual
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    filters: stat,wall,log4j
+    maxPoolPreparedStatmentPerConnectionSize: 20
+    useGlobalDataSourceStat: true
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+  servlet:
+    multipart:
+      max-file-size: 5MB
+  resources:
+    static-locations: ["classpath:static/","file:static/"]
+#  thymeleaf:
+#    cache: false
+#    schema:
+#      - classpath:sql/springboot_cache.sql
+server:
+  port: 8080
+#    initialization-mode: always

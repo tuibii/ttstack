@@ -1,0 +1,164 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>关于泡泡小栈</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        .boxDom {
+            position: relative;
+            width: 1600px;
+            height: 800px;
+
+        }
+        .idDom {
+        }
+        .content {
+            position: absolute;
+
+        }
+        .content p {
+            margin: 5px;
+            float: left;
+        }
+        .content button { /* 按钮美化 */
+            width: 60px; /* 宽度 */
+            height: 30px; /* 高度 */
+            border-width: 0px; /* 边框宽度 */
+            border-radius: 3px; /* 边框半径 */
+            background: #1E90FF; /* 背景颜色 */
+            cursor: pointer; /* 鼠标移入按钮范围时出现手势 */
+            outline: none; /* 不显示轮廓线 */
+            font-family: Microsoft YaHei; /* 设置字体 */
+            color: white; /* 字体颜色 */
+            font-size: 17px; /* 字体大小 */
+        }
+        .content button:hover { /* 鼠标移入按钮范围时改变颜色 */
+            background: #5599FF;
+        }
+        span{
+            position: absolute;
+            font-size: 30px;
+        }
+        .barrage {
+            width: 300px;
+            height: 80px;
+            display:inline-block;
+            position: absolute;
+            top: 250px;
+            left: 30px;
+        }
+        .reward {
+            display:inline-block;
+
+        }
+        #show {
+            position: relative;
+        }
+
+    </style>
+</head>
+<body>
+<table border="0" cellpadding="0" cellspacing="0" height="818" width="1621">
+    <tr>
+        <td valign="top">
+            <a href="#" onclick="tip()">自豪地采用FrontPage2003 构建,点表情回到首页</a>
+            <p align="center"><img border="0" src="/front/images/about/logo.jpg"></p></td>
+    </tr>
+    <tr>
+        <td valign="top">
+            <div align="center" id="show">
+
+                <!-- 弹幕效果 -->
+                <div class="barrage">
+                    <div class="boxDom">
+                        <div class="idDom">
+                            <div class="content">
+                                <p class="title">吐槽:</p>
+                                <input type="text" class="text" id="text">
+                                <button type="button" class="btn" id="btn">发射</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reward">
+                    <img width="600" height="292" src="/front/images/about/pay1.gif">
+                    <img src="/front/images/about/pay.jpg" width="300px" height="300px" alt="">
+                </div>
+            </div>
+        </td>
+    </tr>
+</table>
+<div id="pay2" style="position: absolute; left: 562px; top: 252px;">
+    <a href="#" th:href="@{/hello}">
+        <img border="0" src="/front/images/about/pay2.jpg" alt=""   id="hh">
+    </a>
+</div>
+
+
+
+<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+<script>
+    var x = 50,y = 60
+    var xin = true, yin = true
+    var step = 1
+    var delay = 10
+    var obj=document.getElementById("pay2")
+    function float() {
+        var L=T=0
+        var R= document.body.clientWidth-obj.offsetWidth
+        var B = document.body.clientHeight-obj.offsetHeight
+        obj.style.left = x + document.body.scrollLeft
+        obj.style.top = y + document.body.scrollTop
+        x = x + step*(xin?1:-1)
+        if (x < L) { xin = true; x = L}
+        if (x > R){ xin = false; x = R}
+        y = y + step*(yin?1:-1)
+        if (y < T) { yin = true; y = T }
+        if (y > B) { yin = false; y = B }
+    }
+    var itl= setInterval("float()", delay)
+
+    obj.onmouseover=function(e){
+        clearInterval(itl);
+    }
+
+    function tip(){
+        alert("点表情！");
+    }
+
+    obj.onmouseout=function(){itl=setInterval("float()", delay)}
+
+    // 弹幕
+    $(function(){
+
+
+        var colors= ["red","green","hotpink","pink","cyan","yellowgreen","purple","deepskyblue"];
+        $("#btn").click(function(){
+            var randomColor = parseInt(Math.random()*colors.length);
+            var randomY = parseInt(Math.random()*400);
+
+            $("<span></span>")
+                .text($("#text").val())
+                .css("color",colors[randomColor])
+                .css("left","1600px")
+                .css("top",randomY)
+                .animate({left:-500},10000,function(){
+                    $(this).remove();
+                })
+                .appendTo("body")
+            $("#text").val("")
+        })
+        $("#text").keyup(function(e){
+            if(e.keyCode==13){
+                $("#btn").click();
+            }
+        })
+    })
+</script>
+</body>
+</html>

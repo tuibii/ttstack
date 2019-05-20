@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="/front/css/reset.css">
+    <link rel="stylesheet" type="text/css" href="/front/css/main.css">
+    <script type="text/javascript" src="/front/js/jquery.js"></script>
+    <script type="text/javascript" src="/front/js/main.js"></script>
+    <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/front/css/mycss.css"/>
+    <title>tt的泡泡小栈</title>
+    <style>
+        .class1{font-size:20pt;line-height:30pt;width:360pt;}
+    </style>
+</head>
+<body>
+<header>
+    <div class="logo">
+        <a href="#" th:href="@{/hello}" id="msg" class="class1" face="MS Sans Serif" color=#FF00FF >tt的泡泡小栈</a>
+    </div>
+
+    <div id="menu_icon"></div>
+    <nav>
+        <ul>
+            <li><a href="#" class="selected" style="font-size: 20pt">[[${name}]]</a></li>
+        </ul>
+    </nav>
+</header>
+
+<section class="main clearfix">
+    <div class="work" th:if="${#lists.isEmpty(photos)}">无图片</div>
+    <div class="work" th:each="photo:${photos}">
+        <a th:href="${photo.imgurl}">
+            <img th:src="${photo.imgsrc}" class="media" alt=""/>
+            <div class="caption">
+                <div class="work_title">
+                    <h1>[[${photo.imgtext}]]</h1>
+                </div>
+            </div>
+        </a>
+    </div>
+
+</section>
+
+</body>
+</html>

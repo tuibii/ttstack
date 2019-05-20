@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <!-- 新 Bootstrap 核心 CSS 文件 -->
+    <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style>
+        .img-thumbnail {
+            width: 100px;
+            height: 100px;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-default" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse"
+                    data-target="#example-navbar-collapse">
+                <span class="sr-only">切换导航</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">后台管理</a>
+        </div>
+        <div class="collapse navbar-collapse" id="example-navbar-collapse">
+            <p class="navbar-text navbar-left" th:text="${session.adminAccount}"></p>
+            <ul class="nav navbar-nav navbar-right">
+                <li ><a href="#" th:href="@{/admin/out}">退出</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="container-fluid">
+<div class="row">
+<div class="col-sm-3 col-md-2 sidebar" >
+    <ul class="nav nav-sidebar">
+        <li class="active"><a href="#" th:href="@{/admin/albums}">相册管理</a></li>
+        <li><a href="#" th:href="@{/admin/photos}">图片管理</a></li>
+        <li><a href="#" th:href="@{/admin/albums}">Export</a></li>
+    </ul>
+</div>
+<div class="col-sm-9  col-md-10  main">
+<a th:href="@{/admin/album}" class="btn btn-success">添加相册</a>
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>id</th>
+        <th>封面</th>
+        <th>相册名</th>
+        <th>介绍</th>
+        <th>提示</th>
+        <th>操作</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="album:${albums}">
+        <td th:text="${album.id}"></td>
+        <td ><img th:src="${album.img}" class="img-thumbnail" style=""></td>
+        <td th:text="${album.name}"></td>
+        <td th:text="${album.info}"></td>
+        <td th:text="${album.tip}"></td>
+        <td><a href="#" th:href="@{/admin/album/}+${album.id}" class="btn btn-info">编辑</a>
+            <button th:attr="del_uri=@{/admin/album/}+${album.id}" class="btn btn-warning deleteBtn">
+                删除
+            </button>
+            <div th:if="${msgButton}==${album.id}" th:text="${msg}"></div>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</div>
+</div>
+</div>
+<form id="deleteAlbumForm" method="post">
+    <input type="hidden" name="_method" value="delete">
+</form>
+<script>
+    $(".deleteBtn").click(function () {
+        $("#deleteAlbumForm").attr("action", $(this).attr("del_uri")).submit();
+        return false;
+    });
+</script>
+</body>
+</html>
+
+
+
